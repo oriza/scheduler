@@ -24,7 +24,8 @@ defmodule Scheduler.MixProject do
     [
       {:db, path: "../db"},
       {:scraper, path: "../scraper"},
-      {:utils, path: "../utils"}
+      {:timex, "~> 3.1"},
+      {:quantum, "~> 2.3"}
     ]
   end
 end
