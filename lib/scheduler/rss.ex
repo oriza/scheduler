@@ -1,10 +1,10 @@
 defmodule Scheduler.Rss do
 
   use Timex
-  alias Db.Service.{Article, Site}
+  alias Db.{Article, Site}
 
   def run() do
-    Site.lists()
+    Site.Service.lists()
     |> Enum.map(fn site ->
       site.feed
       |> Scraper.scrape_rss()
@@ -16,7 +16,7 @@ defmodule Scheduler.Rss do
     article
     |> Map.put(:site_id, site_id)
     |> format_datetime()
-    |> Article.create()
+    |> Article.Service.create()
   end
 
   defp save_articles(articles, site) when is_list(articles) do

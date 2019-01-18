@@ -10,3 +10,8 @@ config :db, Db.Repo,
 
 config :db,
   ecto_repos: [Db.Repo]
+
+config :scheduler, Scheduler.Cron,
+  jobs: [
+    {"* * * * *",      {Scheduler.Rss, :run, []}}
+  ]
