@@ -14,5 +14,6 @@ config :db,
 config :scheduler, Scheduler.Cron,
   jobs: [
     {"* * * * *",      {Scheduler.Rss, :run, []}},
-    {"*/5 * * * *",      {Scheduler.Weather, :run, []}}
+    {"*/5 * * * *",      {Scheduler.Weather, :run, []}},
+    {"* */1 * * *",      {Scheduler.Rates, :run, []}}
   ]
