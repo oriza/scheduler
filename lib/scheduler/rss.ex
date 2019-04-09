@@ -2,24 +2,21 @@ defmodule Scheduler.Rss do
 
   use Timex
   alias Db.{Article, Site}
+  alias Scraper.Utils.HTTPoison
 
-  def run(site_number \\ 0) do
+  def run() do
     Site.Service.lists()
-    |> Enum.map(fn site ->
-      site.feed
-      |> Scraper.scrape_rss()
-      |> save_articles(site)
-    end)
+    |> Enum.map(&scrape_rss/1)
   end
 
   def scrape_rss(site) do
-    site.feed
-    |> Scraper.scrape_rss()
+    HTTPoison
+    |> Scraper.scrape_rss(site.feed)
     |> save_articles(site)
   end
 
   defp scrape_article(article, selectors) do
-    Scraper.Article.scrape(article.url, selectors)
+    Scraper.Article.scrape(HTTPoison, article.url, selectors)
   end
 
   defp save_article(article, site) do
