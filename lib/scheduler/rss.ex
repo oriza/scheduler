@@ -16,7 +16,7 @@ defmodule Scheduler.Rss do
   end
 
   defp scrape_article(article, selectors) do
-    Scraper.Article.scrape(HTTPoison, article.url, selectors)
+    Scraper.Article.scrape(HTTPoison, Meeseeks, article.url, selectors)
   end
 
   defp save_article(article, site) do

@@ -1,13 +1,13 @@
 defmodule Scheduler.Rates do
 
   alias Db.{Bank, Rate}
-  alias Scraper.Utils.HTTPoison
+  alias Scraper.Utils.{HTTPoison, Meeseeks}
 
   def run() do
     Bank.Service.lists()
     |> Enum.each(fn bank ->
       rates = Rate.Service.lists(bank.id)
-      current_rates = Scraper.scrape_rates(HTTPoison, bank.slug)
+      current_rates = Scraper.scrape_rates(HTTPoison, Meeseeks, bank.slug)
       |> Enum.map(fn rate -> %{currency: rate.currency, value: rate.average} end)
 
       if (Enum.empty?(rates)) do
