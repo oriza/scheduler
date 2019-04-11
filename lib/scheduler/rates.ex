@@ -1,7 +1,8 @@
 defmodule Scheduler.Rates do
 
   alias Db.{Bank, Rate}
-  alias Scraper.Utils.{HTTPoison, Meeseeks}
+  alias Scraper.Utils.HTTPClient.HTTPoison
+  alias Scraper.Utils.HTMLParser.Meeseeks
 
   def run() do
     Bank.Service.lists()

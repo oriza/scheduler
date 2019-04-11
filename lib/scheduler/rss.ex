@@ -2,7 +2,8 @@ defmodule Scheduler.Rss do
 
   use Timex
   alias Db.{Article, Site}
-  alias Scraper.Utils.{HTTPoison, Meeseeks}
+  alias Scraper.Utils.HTTPClient.HTTPoison
+  alias Scraper.Utils.HTMLParser.Meeseeks
 
   def run() do
     Site.Service.lists()

@@ -1,7 +1,8 @@
 defmodule Scheduler.Weather do
 
   alias Db.Weather
-  alias Scraper.Utils.{HTTPoison, Jason}
+  alias Scraper.Utils.HTTPClient.HTTPoison
+  alias Scraper.Utils.JSONParser.Jason
 
   def run() do
     Weather.Service.lists()
