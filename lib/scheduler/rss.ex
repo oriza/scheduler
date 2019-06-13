@@ -13,11 +13,8 @@ defmodule Scheduler.Rss do
   def scrape_rss(site) do
     HTTPoison
     |> Scraper.scrape_rss(Meeseeks, site.feed)
-    |> save_articles(site)
-  end
-
-  defp scrape_article(article, selectors) do
-    Scraper.Article.scrape(HTTPoison, Meeseeks, article.url, selectors)
+    |> Enum.map(fn article -> save_article(article, site) end)
+    |> Enum.map(fn article -> scrape_article(article, site.article_selector) end)
   end
 
   defp save_article(article, site) do
@@ -26,11 +23,26 @@ defmodule Scheduler.Rss do
     |> Article.Service.create()
   end
 
-  defp save_articles(articles, site) when is_list(articles) do
-    articles |> Enum.map(fn article -> save_article(article, site) end)
+  defp scrape_article({:ok, article}, selectors) do
+    Scraper.Article.scrape(HTTPoison, Meeseeks, article.url, selectors)
+    |> update_article(article)
+    #end
   end
 
-  defp save_articles({:error, reason}, _), do: IO.puts reason
+  defp scrape_article(_, _), do: nil
 
-  defp save_articles(_, _), do: nil
+  defp update_article({:ok, article}, saved_article) do
+    attrs = %{
+      title: saved_article.title,
+      url: saved_article.url,
+      description: saved_article.description,
+      published_at: saved_article.published_at,
+      author: saved_article.author || article.author,
+      content: article.content,
+      html: article.html,
+      extracted: true
+    }
+
+    Article.Service.update(saved_article, attrs)
+  end
 end
